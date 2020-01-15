@@ -3,15 +3,27 @@ import moment
 
 
 def check_source_contains_leadership_chart(source_contents):
-    if "<option value=\"6\" selected>Leadership Chart</option>" not in source_contents:
-        raise ValueError("The source does not contain the Leadership Chart")
+    if "<option value=\"6\" selected>Leadership Chart</option>" in source_contents:
+        return True
+    else:
+        return False
+
+
+def is_second_date_later(date1, date2):
+    if date2.year > date1.year or \
+            (date2.year >= date1.year and date2.month > date1.month) or \
+            (date2.year >= date1.year and date2.month >= date1.month and date2.day > date1.day):
+        return True
+    else:
+        return False
 
 
 def parse_for_competent_leader_award(source_html):
     with open(source_html, 'r') as file:
         source_contents = file.read()
 
-    check_source_contains_leadership_chart(source_contents)
+    if not check_source_contains_leadership_chart(source_contents):
+        raise ValueError("The source does not contain the Leadership Chart")
 
     soup = bs4.BeautifulSoup(source_contents, "html.parser")
     tds = soup.findAll("td")
@@ -35,9 +47,7 @@ def parse_for_competent_leader_award(source_html):
                             role_data = str.split(title, " - ")
                             date_str = role_data[1].strip()
                             date = moment.date(date_str, '%d-%M-%Y')
-                            if date.year > latest_date.year or\
-                                    (date.year >= latest_date.year and date.month > latest_date.month) or\
-                                    (date.year >= latest_date.year and date.month >= latest_date.month and date.day >= latest_date.day):
+                            if is_second_date_later(latest_date, date):
                                 latest_date = date
         if latest_date != moment.unix(0).date:
             print(latest_date.strftime("%m/%d/%Y"))
