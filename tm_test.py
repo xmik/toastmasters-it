@@ -1,5 +1,6 @@
 import moment
 import tm
+import pytest
 
 
 def test_is_second_date_later_when_same_date():
@@ -87,6 +88,43 @@ def test_check_source_contains_leadership_chart_when_false():
 
 def test_check_source_contains_leadership_chart_when_true():
     contents = '''
-tion><option value="5">Roles by Meeting</option><option value="6" selected>Leadership Chart</option><option value="9">Mentoring</option><op" 
+tion><option value="5">Roles by Meeting</option><option value="6" selected>Leadership Chart</option><option value="9">Mentoring</option><op"
 '''
     assert tm.check_source_contains_leadership_chart(contents)
+
+
+def test_parse_user_name_arg_no_args():
+    user_name = tm.parse_user_name_arg([])
+    assert user_name == ""
+
+
+def test_parse_user_name_arg_1_arg():
+    user_name = tm.parse_user_name_arg(["first"])
+    assert user_name == ""
+
+
+def test_parse_user_name_arg_2_args():
+    user_name = tm.parse_user_name_arg(["first", "\"second\""])
+    assert user_name == "second"
+
+
+def test_parse_user_name_arg_2_args():
+    user_name = tm.parse_user_name_arg(["first", "second"])
+    assert user_name == "second"
+
+
+def test_parse_user_name_arg_3_args():
+    with pytest.raises(ValueError, match=r"Too many arguments set"):
+        tm.parse_user_name_arg(["first", "second", "third"])
+
+
+def test_user_name_matched_true():
+    assert tm.user_name_matched("abc", "abc") == True
+
+
+def test_user_name_matched_false():
+    assert tm.user_name_matched("abc", "1") == False
+
+
+def test_user_name_matched_empty_cli_arg():
+    assert tm.user_name_matched("", "1") == True
