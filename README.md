@@ -27,13 +27,13 @@ $ python tm.py
 
   ```
   $ python tm.py "User Eleventh"
-  User Eleventh
-  Ah-Counter - 02 Jul 19
-  07/02/2019
-
-  Speaker - 18 Jun 19
-  Timekeeper - 21 May 19
-  06/18/2019
+    -------------------------------
+    User Eleventh
+    Role - Column: 1; Function: Ah-Counter; Date: 02 Jul 19
+    07/02/2019
+    Role - Column: 2; Function: Speaker; Date: 18 Jun 19
+    Role - Column: 2; Function: Timekeeper; Date: 21 May 19
+    06/18/2019
   ```
 
 The dates in American notation, e.g. 06/18/2019 should be entered on the toastmasters.org website.
